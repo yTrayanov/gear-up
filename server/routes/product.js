@@ -27,6 +27,7 @@ router.get('/all' , (req, res) => {
 
 router.get('/details/:id', (req, res) => {
     const id = req.params.id
+
     Product.findById(id)
       .then((product) => {
         if (!product) {
@@ -38,11 +39,9 @@ router.get('/details/:id', (req, res) => {
   
         let response = {
           id,
-          title: product.title,
-          description: product.description,
+          name: product.name,
+          image: product.image,
           price: product.price,
-          author: product.author,
-          image:product.image
         }
   
   
@@ -62,7 +61,6 @@ router.post('/add' ,async (req,res) =>{
   .populate('cart')
     .then((user) =>{
       for(let m of user.cart){
-        debugger;
         if(product.id === m.id){
           isAlreadyAdded = true;
         }
@@ -89,9 +87,9 @@ router.get('/user/:id', (req,res)=>{
     });
 })
 
-router.post('/user/remove', (req,res) =>{
-  let productId = req.body['productid'];
-  let userid = req.body['userid'];
+router.post('/user/remove',async (req,res) =>{
+  let productId = req.body['productId'];
+  let userid = req.body['userId'];
 
   let product;
   Product.findById(productId)
@@ -99,7 +97,7 @@ router.post('/user/remove', (req,res) =>{
       product = p;
     })
 
-  let currentUser = User.findById(userid)
+  await User.findById(userid)
     .populate('cart')
     .then((user) =>{
 
@@ -114,48 +112,63 @@ router.post('/user/remove', (req,res) =>{
 })
 
 router.delete('/remove/:id', (req,res) =>{
-  const mangaId = req.params.id;
+  const productId = req.params.id;
   
-  Product.findById(mangaId)
-    .then((manga) => {
-      if (!manga) {
+  Product.findById(productId)
+    .then((product) => {
+      if (!product) {
         return res.status(200).json({
           success: false,
-          message: 'Manga does not exists!'
+          message: 'Product does not exists!'
         })
       }
 
-      Product.findByIdAndDelete(mangaId)
+      Product.findByIdAndDelete(productId)
         .then(() => {
           return res.status(200).json({
             success: true,
-            message: 'Manga deleted successfully!'
+            message: 'Product deleted successfully!'
           })
         })
     })
 });
 
 router.post('/edit/:id',(req,res) =>{
-  const mangaId = req.params.id;
-  const updatedManga = req.body;
+  const productId = req.params.id;
+  const updateProduct = req.body;
 
-  Product.findById(mangaId)
-    .then((manga) => {
-      manga.title = updatedManga.title;
-      manga.image = updatedManga.image;
-      manga.description =updatedManga.description;
-      manga.price = updatedManga.price;
-      manga.description = updatedManga.description;
+  Product.findById(productId)
+    .then((product) => {
+      product.name = updateProduct.name;
+      product.image = updateProduct.image;
+      product.price =updateProduct.price;
 
-      manga.save();
+      product.save();
 
       return res.status(200).json({
         success:true,
-        message:'Updated manga successfully'
+        message:'Updated product successfully'
       })
     })
 })
 
-  
+router.get('/check/:productId/:userId' ,async (req , res) =>{
+  const productId = req.params.productId;
+  const userId = req.params.userId;
+  let product = await Product.findById(productId);
+
+  User.findById(userId)
+  .populate('cart')
+    .then((user) =>{
+      for(let m of user.cart){
+        if(product.id === m.id){
+          return res.status(200).json({isAdded:'true'})
+        }
+      }
+
+      return res.status(200).json({isAdded:'false'})
+    });
+
+})
 
 module.exports = router;

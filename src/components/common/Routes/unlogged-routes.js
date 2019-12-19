@@ -4,11 +4,11 @@ import AuthService from '../../../services/auth.service';
 
 const service = new AuthService();
 
-const AdminRoute = ({component:Component ,isAdmin, ...res}) =>(
+const UnloggedRoute = ({component:Component ,isAdmin, ...res}) =>(
     <Route  {...res} render={props =>(
-        ( service.isAuthenticated() && service.isAdmin()) ? (<Component {...props} />)
+        !service.isAuthenticated()? (<Component {...props} />)
                         : (<Redirect to={{pathname:'/', state: {from:props.location}}} />)
     )}/>
 )
 
-export default AdminRoute;
+export default UnloggedRoute;

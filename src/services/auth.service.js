@@ -25,10 +25,6 @@ export default class AuthService{
         })
     }
 
-    logout(){
-        window.localStorage.clear();
-    }
-
     isAuthenticated() {
         return window.localStorage.getItem('token') !== null;
       }

@@ -29,6 +29,8 @@ class Register extends Component {
                     console.log(data)
                 })
 
+        this.props.history.push('/login');
+
     }
 
     render(){

@@ -1,9 +1,10 @@
 import React , {Component} from 'react';
 import Product from './product';
 import ProductService from '../../services/product.service';
-import ProductViewModel from '../../view-models/product-view-model';
+import AuthService from '../../services/auth.service';
 
-const service = new ProductService();
+const productService = new ProductService();
+const authService = new AuthService();
 
 class AllProducts extends Component{
 
@@ -11,30 +12,40 @@ class AllProducts extends Component{
         super(props);
 
         this.state = {
-            data:[]
+            data:[],
+            show:'false'
         }
+
+        this.refresh = this.refresh.bind(this);
     }
 
     
     async componentDidMount(){
-        let res ='';
-        await service.getAllProducts()
+        await productService.getAllProducts()
         .then(result => {
-            res = result;
+            this.setState({data:result})
         });
 
-        let products = [];
-
-        for(let p of res){
-            products.push(new ProductViewModel(p.name , p.image , p.price));
+        if(authService.isAuthenticated() && authService.isAdmin()){
+            this.setState({show:'true'})
         }
-
-        this.setState({data:products})
+        
     }
+
+    refresh(){
+        this.props.history.push('/');
+        this.props.history.push('/products')
+    }
+
+    
 
     render(){
 
-        let allProducts = this.state.data.map((p,i) => (<Product data={p} key={i}/>))
+        let allProducts = this.state.data.map((p,i) => (<Product 
+                refresh={this.refresh}
+                show={this.state.show}
+                data={p} 
+                key={i}/>))
 
         return(
             <div className='container'>

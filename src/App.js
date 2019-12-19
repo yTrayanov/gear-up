@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component , Fragment  } from 'react';
 import './App.css';
 import {Switch , Route }   from 'react-router-dom';
 
@@ -14,30 +14,53 @@ import EditProduct from './components/products/edit-product';
 
 import AdminRoute from './components/common/Routes/admin-route'
 import PrivateRoute from './components/common/Routes/private-route';
+import UnloggedRoute from './components/common/Routes/unlogged-routes';
+
+import AuthService from './services/auth.service';
+const authService = new AuthService(); 
 
 class App extends Component {
 
   constructor(props){
     super(props)
 
-    this.state = {
-      isLogged:false,
+    this.state ={
+      islogged:'false'
+    }
+
+    this.logout = this.logout.bind(this);
+  }
+
+  logout(){
+    window.localStorage.clear();
+    this.setState({
+      islogged:'false'
+    })
+  }
+
+  componentDidUpdate(){
+    if(authService.isAuthenticated()){
+      this.setState({islogged:true});
     }
   }
+
 
   render(){
     return (
       <div className="App">
-        <Navbar />
-          <Switch>
-            <Route exact path='/' component={HomePage} />
-            <Route exact path='/products' component={AllProducts}/>
-            <Route exact path='/login' component={Login} />
-            <Route exact path='/register' component={Register} />
-            <PrivateRoute path='/cart' component={Cart} />
-            <AdminRoute path='/create' component={CreateProduct}/>
-            <AdminRoute path='/edit/:id' component={EditProduct}/>
-          </Switch>
+        <Fragment>
+            <Navbar logout={this.logout}/>
+            <Switch>
+              <Route exact path='/' component={HomePage} />
+              <Route exact path='/products' component={AllProducts}/>
+              <UnloggedRoute exact path='/login' component={Login} />
+              <UnloggedRoute exact path='/register' component={Register} />
+              <PrivateRoute exact path='/cart'  component={Cart} />
+              <AdminRoute exact path='/create' component={CreateProduct}/>
+              <AdminRoute exact path='/edit/:id' component={EditProduct}/>
+              <Route Component={HomePage} />
+            </Switch>
+        </Fragment>
       </div>
     );
   }

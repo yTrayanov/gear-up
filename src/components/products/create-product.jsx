@@ -20,6 +20,7 @@ class CreateProduct extends Component{
     onChange(event){
         this.setState({[event.target.name]: event.target.value});
     }
+    
 
     async onSubmit(event){
         event.preventDefault();
@@ -29,6 +30,9 @@ class CreateProduct extends Component{
                         console.log('Product created!!');
                     })
 
+        this.props.history.push('/');
+        this.props.history.push('/create');
+
     }
 
     render(){
@@ -37,7 +41,7 @@ class CreateProduct extends Component{
                 <div className="row">
                     <div className="col-lg-4"></div>
                     <div className="col-lg-4">
-                        <h1>Sign Up</h1>
+                        <h1>Create new product</h1>
                         <form onSubmit ={this.onSubmit}>
 
                             <div className="form-group input-group">

@@ -23,12 +23,13 @@ class Login extends Component{
                     
         await service.login(this.state.email , this.state.password)
                      .then(data =>{
-                         console.log(data);
                          localStorage.setItem('token',data['token']);
                          localStorage.setItem('username',data['user']['username']);
                          localStorage.setItem('isAdmin',data['user']['isAdmin']);
                          localStorage.setItem('userId',data['user']['userId'])
                      });
+
+        this.props.history.push('/products');
     }
 
     onChange(event){
@@ -57,7 +58,7 @@ class Login extends Component{
                                     <input type="password" value={this.state.password} onChange={this.onChange} className="form-control" name='password'  placeholder="Password" />
                                 </div>
                                 <div className="form-group">
-                                    <button type="submit" className="btn btn-primary btn-block" > Sign In </button>
+                                    <button type="submit" href='/' className="btn btn-primary btn-block" > Sign In </button>
                                 </div>
                         </form>
                     </div>
