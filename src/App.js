@@ -13,6 +13,7 @@ import Cart from './components/products/cart';
 import EditProduct from './components/products/edit-product';
 
 import CreateOrder from './components/orders/create-order';
+import AllOrders from './components/orders/all-orders';
 
 import AdminRoute from './components/common/Routes/admin-route'
 import PrivateRoute from './components/common/Routes/private-route';
@@ -58,6 +59,7 @@ class App extends Component {
               <UnloggedRoute exact path='/login' component={Login} />
               <UnloggedRoute exact path='/register' component={Register} />
               <PrivateRoute exact path='/cart'  component={Cart} />
+              <PrivateRoute exact path='/orders'  component={AllOrders} />
               <PrivateRoute exact path='/order/create/:id' component={CreateOrder} />
               <AdminRoute exact path='/create' component={CreateProduct}/>
               <AdminRoute exact path='/edit/:id' component={EditProduct}/>

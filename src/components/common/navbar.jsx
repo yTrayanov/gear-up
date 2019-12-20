@@ -22,6 +22,7 @@ class Navbar extends Component{
                             {!authService.isAuthenticated() ? <li className='nav-link'><Link to='/Login'>Login</Link></li> : null}
                             {!authService.isAuthenticated() ? <li className='nav-link'><Link to='/register'>Register</Link></li> : null}
                             {(authService.isAuthenticated() && !authService.isAdmin()) ? <li className='nav-link'><Link to='/cart'>Cart</Link></li> : null}
+                            {(authService.isAuthenticated() && !authService.isAdmin()) ? <li className='nav-link'><Link to='/orders'>Orders</Link></li> : null}
                             {(authService.isAuthenticated() && authService.isAdmin()) ? <li className='nav-link'><Link to='/create'>Create</Link></li> : null}
                             {authService.isAuthenticated() ? <li className='nav-link'><a href="/" onClick={this.props.logout}>Logout</a></li> : null}
                             

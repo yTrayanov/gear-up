@@ -19,4 +19,19 @@ export default class OrderService{
             throw error;
         })
     }
+
+    async getUserOrders(){
+
+        const userId = authService.getUserId();
+
+        let res;
+         await window.fetch(BaseUrl + 'all/' + userId)
+            .then(response => response.json())
+            .then(data =>{
+                res = data;
+            });
+
+            return res;
+        
+    }
 }

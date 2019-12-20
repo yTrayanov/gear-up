@@ -109,9 +109,6 @@ export default class ProductService{
     async removeFromCart(productId){
         const userId = authService.getUserId();
 
-        console.log(productId);
-        console.log(userId);
-
         window.fetch(BaseUrl +'user/remove',{
             method:'POST',
             headers:{
