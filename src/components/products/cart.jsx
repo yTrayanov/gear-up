@@ -17,28 +17,35 @@ class Cart extends Component{
     }
 
 
-    async componentDidMount(){
-        const data = await productService.getUserProducts();
-        this.setState({
-            products:data
-        })
+    componentDidMount(){
+          productService.getUserProducts()
+         .then(data =>{
+            this.setState({
+                products:data
+            })
+         });
         
     }
 
     
-    refresh(){
-        this.props.history.push('/');
-        this.props.history.push('/products');
+    async refresh(){
+        const data = await productService.getUserProducts();
+        this.setState({
+            products:data
+        })
+
+        this.props.history.push('/')
+        this.props.history.push('/cart')
     }
 
     render(){
-        let allProducts = this.state.products.map((p,i) => (<Product refresh={this.refresh} show='true' data={p} key={i}/>))
-        console.log(allProducts)
+        let allProducts = this.state.products.map((p,i) => (<Product refresh={this.refresh} canOrder='true' show='true' data={p} key={i}/>))
+        
 
         return(
             <div className='container'>
-                <p>Here are all products</p>
-                <ul>
+                <h1>My Products</h1>
+                <ul className="row">
                     {allProducts}
                 </ul>
             </div>

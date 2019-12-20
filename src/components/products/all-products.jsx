@@ -44,13 +44,14 @@ class AllProducts extends Component{
         let allProducts = this.state.data.map((p,i) => (<Product 
                 refresh={this.refresh}
                 show={this.state.show}
+                canOrder='false'
                 data={p} 
                 key={i}/>))
 
         return(
             <div className='container'>
                 <p>Here are all products</p>
-                <ul>
+                <ul className='row'>
                     {allProducts}
                 </ul>
             </div>

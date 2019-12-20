@@ -9,7 +9,7 @@ export default class AuthService{
                 'Content-Type':'application/json'
             },body:JSON.stringify({email,password})
         }).catch(error =>{
-            throw error;
+            return error;
         });
 
         return res.json();
@@ -26,7 +26,7 @@ export default class AuthService{
     }
 
     isAuthenticated() {
-        return window.localStorage.getItem('token') !== null;
+        return window.localStorage.getItem('token') !== null && window.localStorage.getItem('token') !=='undefined' ;
       }
     
       isAdmin(){

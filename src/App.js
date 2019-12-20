@@ -12,6 +12,8 @@ import CreateProduct from './components/products/create-product';
 import Cart from './components/products/cart';
 import EditProduct from './components/products/edit-product';
 
+import CreateOrder from './components/orders/create-order';
+
 import AdminRoute from './components/common/Routes/admin-route'
 import PrivateRoute from './components/common/Routes/private-route';
 import UnloggedRoute from './components/common/Routes/unlogged-routes';
@@ -24,11 +26,9 @@ class App extends Component {
   constructor(props){
     super(props)
 
-    this.state ={
-      islogged:'false'
-    }
 
     this.logout = this.logout.bind(this);
+    this.login = this.login.bind(this);
   }
 
   logout(){
@@ -38,24 +38,27 @@ class App extends Component {
     })
   }
 
-  componentDidUpdate(){
-    if(authService.isAuthenticated()){
-      this.setState({islogged:true});
-    }
+  login(){
+    this.setState({
+      islogged:'true'
+    })
   }
+
+  
 
 
   render(){
     return (
       <div className="App">
         <Fragment>
-            <Navbar logout={this.logout}/>
+            <Navbar logout={this.logout} login={this.login}/>
             <Switch>
               <Route exact path='/' component={HomePage} />
               <Route exact path='/products' component={AllProducts}/>
               <UnloggedRoute exact path='/login' component={Login} />
               <UnloggedRoute exact path='/register' component={Register} />
               <PrivateRoute exact path='/cart'  component={Cart} />
+              <PrivateRoute exact path='/order/create/:id' component={CreateOrder} />
               <AdminRoute exact path='/create' component={CreateProduct}/>
               <AdminRoute exact path='/edit/:id' component={EditProduct}/>
               <Route Component={HomePage} />

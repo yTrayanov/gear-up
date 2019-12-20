@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import AuthService from '../../services/auth.service';
-const service = new AuthService();
+const authService = new AuthService();
 
 class Login extends Component{
 
@@ -10,7 +10,8 @@ class Login extends Component{
 
         this.state = {
             email:'',
-            password:''
+            password:'',
+            message:null
         }
 
         this.onSubmit = this.onSubmit.bind(this);
@@ -21,15 +22,17 @@ class Login extends Component{
         event.preventDefault();
 
                     
-        await service.login(this.state.email , this.state.password)
+        await authService.login(this.state.email , this.state.password)
                      .then(data =>{
                          localStorage.setItem('token',data['token']);
                          localStorage.setItem('username',data['user']['username']);
                          localStorage.setItem('isAdmin',data['user']['isAdmin']);
                          localStorage.setItem('userId',data['user']['userId'])
-                     });
+                         this.props.history.push('/products');
+                     }).catch(() =>{
+                        this.setState({message:'Wrong email or password'})
+                     })
 
-        this.props.history.push('/products');
     }
 
     onChange(event){
@@ -61,6 +64,7 @@ class Login extends Component{
                                     <button type="submit" href='/' className="btn btn-primary btn-block" > Sign In </button>
                                 </div>
                         </form>
+                        {(this.state.message)? <span>Wrong email or passowrd</span> : null}
                     </div>
                 </div>
                 <div className="col-lg-4"></div>

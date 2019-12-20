@@ -10,6 +10,7 @@ class Register extends Component {
             email:'',
             username:'',
             password:'',
+            message:'',
         }
 
         this.onChange = this.onChange.bind(this);
@@ -26,10 +27,13 @@ class Register extends Component {
 
         await service.register(this.state.username , this.state.email , this.state.password)
                 .then((data) => {
-                    console.log(data)
+                    this.props.history.push('/login');
+                }).catch(error =>{
+                    this.setState({
+                        message:'Invalid form'
+                    })
                 })
 
-        this.props.history.push('/login');
 
     }
 
@@ -66,6 +70,7 @@ class Register extends Component {
                                     <button type="submit" className="btn btn-primary btn-block" > Sign Up </button>
                                 </div>
                         </form>
+                        {(this.state.message)? <span>Invalid from</span> : null}
                     </div>
                 </div>
                 <div className="col-lg-4"></div>
